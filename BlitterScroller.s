@@ -1,8 +1,6 @@
 
-; This can be compiled at least with PhxAss assembler
+; This can be compiled with at least with PhxAss assembler
 ; I hope, it can be still found in the Aminet
-
-; Written by a random person 5/5/2021
 
 ; The code isn't state of the art assembly, but perhaps easier to understand...
 
@@ -178,7 +176,7 @@ _start
         bsr     Show
 MainProgram:
  
-	    bsr     Scroll
+	bsr     Scroll
         bsr     WaitForBeam
 
         move.l  #fontw,a0       ; Font width
@@ -323,11 +321,24 @@ Show:   move.l  bitplane1,d1
         move.w  d1,low1
         swap    d1
         move.w  d1,high1
+
+        move.l  bitplane1,d1
+        add.l   #(384/8)*32,d1
+        move.w  d1,low11
+        swap    d1
+        move.w  d1,high11
+
+        move.l  bitplane1,d1
+        add.l   #(384/8)*64,d1
+        move.w  d1,low12
+        swap    d1
+        move.w  d1,high12
+
         rts
 
 gfxname         dc.b    "graphics.library",0
 intuiname       dc.b    "intuition.library",0
-dosname		    dc.b    "dos.library",0
+dosname		dc.b    "dos.library",0
 
 scrolltext      dc.b    "THOSE WERE THE DAYS   THE AMIGA DAYS   BACK IN THE DAY                                       ",0
         even
@@ -344,7 +355,7 @@ chiprev         dc.b    0
 
 intuibase       dc.l    0
 gfxbase         dc.l    0
-dosbase		    dc.l    0
+dosbase		dc.l    0
 
 fontw           dc.l    32
 t_pointer       dc.l    0
@@ -371,41 +382,92 @@ low1:   dc.w    $0000
 Colours
         dc.w    $0180,$0000
         dc.w	$3101,$ff00,$0182,$0138
-	    dc.w	$3301,$ff00,$0182,$0238
-	    dc.w    $3501,$ff00,$0182,$0338
-	    dc.w    $3701,$ff00,$0182,$0438
-	    dc.w	$3901,$ff00,$0182,$0538
+	dc.w	$3301,$ff00,$0182,$0238
+	dc.w    $3501,$ff00,$0182,$0338
+	dc.w    $3701,$ff00,$0182,$0438
+	dc.w	$3901,$ff00,$0182,$0538
         dc.w	$3101,$ff00,$0182,$0638
-	    dc.w	$3301,$ff00,$0182,$0738
-	    dc.w    $3501,$ff00,$0182,$0838
-	    dc.w    $3701,$ff00,$0182,$0938
-	    dc.w	$3901,$ff00,$0182,$0a38
+	dc.w	$3301,$ff00,$0182,$0738
+	dc.w    $3501,$ff00,$0182,$0838
+	dc.w    $3701,$ff00,$0182,$0938
+	dc.w	$3901,$ff00,$0182,$0a38
         dc.w	$3a01,$ff00,$0182,$0b38
-	    dc.w	$3b01,$ff00,$0182,$0c38
-	    dc.w    $3c01,$ff00,$0182,$0d38
-	    dc.w    $3d01,$ff00,$0182,$0e38
-	    dc.w	$3e01,$ff00,$0182,$0f38
+	dc.w	$3b01,$ff00,$0182,$0c38
+	dc.w    $3c01,$ff00,$0182,$0d38
+	dc.w    $3d01,$ff00,$0182,$0e38
+	dc.w	$3e01,$ff00,$0182,$0f38
         dc.w	$3f01,$ff00,$0182,$0f38
-	    dc.w	$4001,$ff00,$0182,$0e38
-	    dc.w    $4101,$ff00,$0182,$0d38
-	    dc.w    $4201,$ff00,$0182,$0c38
-	    dc.w	$4301,$ff00,$0182,$0b38
+	dc.w	$4001,$ff00,$0182,$0e38
+	dc.w    $4101,$ff00,$0182,$0d38
+	dc.w    $4201,$ff00,$0182,$0c38
+	dc.w	$4301,$ff00,$0182,$0b38
         dc.w	$4401,$ff00,$0182,$0a38
-	    dc.w	$4501,$ff00,$0182,$0938
-	    dc.w    $4601,$ff00,$0182,$0838
-	    dc.w    $4701,$ff00,$0182,$0738
-	    dc.w	$4801,$ff00,$0182,$0638
+	dc.w	$4501,$ff00,$0182,$0938
+	dc.w    $4601,$ff00,$0182,$0838
+	dc.w    $4701,$ff00,$0182,$0738
+	dc.w	$4801,$ff00,$0182,$0638
         dc.w	$4901,$ff00,$0182,$0538
-	    dc.w	$4a01,$ff00,$0182,$0438
-	    dc.w    $4b01,$ff00,$0182,$0338
-	    dc.w    $4c01,$ff00,$0182,$02f8
-	    dc.w	$4d01,$ff00,$0182,$0138
-        dc.w    $4e01,$ff00,$0182,$0138
-	    dc.w	$4d01,$ff00,$0182,$0138       
+	dc.w	$4a01,$ff00,$0182,$0438
+	dc.w    $4b01,$ff00,$0182,$0338
+	dc.w    $4c01,$ff00,$0182,$02f8
+	dc.w	$4d01,$ff00,$0182,$0138
+        dc.w    $4e01,$ff00
+        
+        dc.w    $0182,$0138
+        dc.w    $00e0
+high11: dc.w    $0000
+        dc.w    $00e2
+low11:  dc.w    $0000
+        dc.w    $0108,8-96      ; Mirroring: (320/8 - 384 / 8) - (384 / 8) * 2
+
+	dc.w	$4d01,$ff00,$0182,$0138       
+	dc.w	$4d01,$ff00,$0182,$0134
+	dc.w    $4e01,$ff00,$0182,$0234
+	dc.w    $4f01,$ff00,$0182,$0334
+        dc.w	$5001,$ff00,$0182,$0434
+	dc.w    $5101,$ff00,$0182,$0534
+	
+        dc.w    $5201,$ff00,$0182,$0634
+	dc.w	$5301,$ff00,$0182,$0734
+        dc.w	$5401,$ff00,$0182,$0834
+	dc.w	$5501,$ff00,$0182,$0934
+	dc.w    $5601,$ff00,$0182,$0a34
+	dc.w    $5701,$ff00,$0182,$0b34
+	dc.w	$5801,$ff00,$0182,$0c34
+        dc.w	$5901,$ff00,$0182,$0d34
+	dc.w	$5a01,$ff00,$0182,$0e34
+	dc.w    $5b01,$ff00,$0182,$0f34
+	dc.w    $5c01,$ff00,$0182,$0ff4
+	dc.w	$5d01,$ff00,$0182,$0e34
+        dc.w    $5e01,$ff00,$0182,$0d34
+	dc.w	$5d01,$ff00,$0182,$0c34  
+	dc.w	$5e01,$ff00,$0182,$0b34
+        dc.w	$5f01,$ff00,$0182,$0a34
+	dc.w	$6001,$ff00,$0182,$0934
+	dc.w    $6101,$ff00,$0182,$0834
+	dc.w    $6201,$ff00,$0182,$0734
+	dc.w	$6301,$ff00,$0182,$0634
+        dc.w	$6401,$ff00,$0182,$0534
+	dc.w	$6501,$ff00,$0182,$0434
+	dc.w    $6601,$ff00,$0182,$0334
+	dc.w    $6701,$ff00,$0182,$0234
+	dc.w	$6801,$ff00,$0182,$0134
+        dc.w	$6901,$ff00,$0182,$0134
+	dc.w	$6a01,$ff00,$0182,$0134
+      
+     
+ 
+
+        dc.w    $6d01,$ff00
+        dc.w    $00e0
+high12: dc.w    $0000
+        dc.w    $00e2
+low12:  dc.w    $0000
+        dc.w    $0108,8
 
         dc.w    $ffff,$fffe
         
         ; change this to where you have the font
-Font    incbin  "Work:MyProjects/Scroller/gfx/gradbubble-32x32-wip.raw"
-spaceg  ds.b    (32/8)*32   ; empty space, there isn't space in the font
+Font    incbin  "Work:MyProjects/SinScroller/gfx/gradbubble-32x32-wip.raw"
+spaceg  ds.b    (32/8)*32
         end
