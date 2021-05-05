@@ -4,4 +4,4 @@ It's been a long time since I've coded with Amiga, so.. forgive.. :-)
 
 Short GIF-animation of the scroll:
 
-![Amiga-bitter-scroll](https://user-images.githubusercontent.com/61118857/117158820-6edd6680-adc8-11eb-9bf6-ecff2dbca0b9.gif)
+![amiga-bitter-scroller-mirroring](https://user-images.githubusercontent.com/61118857/117199933-782ff880-adf3-11eb-8231-cc378ba0bc22.gif)
