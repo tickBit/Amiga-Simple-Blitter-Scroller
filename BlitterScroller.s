@@ -468,6 +468,6 @@ low12:  dc.w    $0000
         dc.w    $ffff,$fffe
         
         ; change this to where you have the font
-Font    incbin  "Work:MyProjects/SinScroller/gfx/gradbubble-32x32-wip.raw"
+Font    incbin  "Work:MyProjects/Scroller/gfx/gradbubble-32x32-wip.raw"
 spaceg  ds.b    (32/8)*32
         end
