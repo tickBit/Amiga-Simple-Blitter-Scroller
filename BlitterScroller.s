@@ -1,5 +1,5 @@
 
-; This can be compiled with at least with PhxAss assembler
+; This can be compiled at least with PhxAss assembler
 ; I hope, it can be still found in the Aminet
 
 ; The code isn't state of the art assembly, but perhaps easier to understand...
