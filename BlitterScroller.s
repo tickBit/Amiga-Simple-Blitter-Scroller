@@ -171,7 +171,11 @@ _start
         move.l  #Copperlist,$dff080
         tst.w   $dff088                ; Own Copperlist on..
 
-        move.w  #$87f0,$dff096         ; DMACON
+        move.w  #$83c0,$dff096         ; DMACON
+        move.w  #$0420,$dff096         ; DMACON (sprites off)
+                                       ; Sprites must be explicitly set off, if they're
+                                       ; not used, otherwise one gets "phantom graphics flickering
+                                       ; on the screen"...
 
         bsr     Show
 MainProgram:
