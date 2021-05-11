@@ -167,11 +167,13 @@ _start
         move.l  d0,bitplane1
         beq     Exit
 
+        lea     $dff000,a5
 
-        move.l  #Copperlist,$dff080
-        tst.w   $dff088                ; Own Copperlist on..
+        move.l  #Copperlist,$080(a5)
+        tst.w   $088(a5)               ; Own Copperlist on..
 
-        move.w  #$87f0,$dff096         ; DMACON
+        move.w  #$83c0,$096(a5)        ; DMACON
+        move.w  #$0420,$096(a5)
 
         bsr     Show
 MainProgram:
@@ -187,7 +189,10 @@ MainProgram:
  
 mousebutton
         btst    #6,$bfe001      ; Left mousebutton to exit the app
-        bne.s   MainProgram
+        bne.s   MainProgram     ; DMACON (sprites off)
+                                ; Sprites must be explicitly set off, if they're
+                                ; not used, otherwise one gets "phantom graphics flickering
+                                ; on the screen"...
 
 CleanUp
 Freebitplane1
@@ -233,86 +238,86 @@ subtract_A_ascii
 
         WaitForBlitter
         
-        move.w  #0000,$dff042   ; BLTCON1
-        move.w  #$09f0,$dff040  ; BLTCON0
+        move.w  #$0000,$042(a5) ; BLTCON1
+        move.w  #$09f0,$040(a5) ; BLTCON0
 
         move.l  #Font,a1
         add.l   d2,a1
-        move.l  a1,$dff050      ; BLTAPTR source
+        move.l  a1,$050(a5)     ; BLTAPTR source
         move.l  bitplane1,a0
         add.l   #40,a0
-        move.l  a0,$dff054      ; BLTDPTH dest
+        move.l  a0,$054(a5)     ; BLTDPTH dest
 
-        move.w  #$ffff,$dff044
-        move.w  #$ffff,$dff046
+        move.w  #$ffff,$044(a5)
+        move.w  #$ffff,$046(a5)
 
-        move.w  #0000,$dff064   ; BLTAMOD (source modulo)
-        move.w  #0044,$dff066   ; BLTDMOD (dest modulo)
+        move.w  #0000,$064(a5)   ; BLTAMOD (source modulo)
+        move.w  #0044,$066(a5)   ; BLTDMOD (dest modulo)
 
         moveq   #0,d0
         move.w  #32,d0          ; height
         lsl.w   #6,d0           ; height to appropriate bits
         or.w    #2,d0           ; width / 16
-        move.w  d0,$dff058      ; BLTSIZE       
+        move.w  d0,$058(a5)     ; BLTSIZE       
         rts
 
 WaitForBeam:
-        cmp.b   #$ff,$dff006
+        cmp.b   #$ff,$006(a5)
         bne.s   WaitForBeam
 WFBeam:
-        cmp.b   #$2c,$dff006
+        cmp.b   #$2c,$006(a5)
         bne.s   WFBeam
         rts
 
 space:
         addq.l  #1,(a2)
-        move.w  #0000,$dff042   ; BLTCON1
-        move.w  #$09f0,$dff040  ; BLTCON0
+        move.w  #$0000,$042(a5) ; BLTCON1
+        move.w  #$09f0,$040(a5) ; BLTCON0
 
         move.l  #spaceg,a1
-        move.l  a1,$dff050      ; BLTAPTH source
+        move.l  a1,$050(a5)     ; BLTAPTH source
         move.l  bitplane1,a0
         add.l   #40,a0
-        move.l  a0,$dff054      ; BLTDPTH dest
+        move.l  a0,$054(a5)     ; BLTDPTH dest
 
-        move.w  #$ffff,$dff044
-        move.w  #$ffff,$dff046
+        move.w  #$ffff,$044(a5)
+        move.w  #$ffff,$046(a5)
 
-        move.w  #0000,$dff064   ; BLTAMOD (source modulo)
-        move.w  #0044,$dff066   ; BLTDMOD (dest modulo)
+        move.w  #0000,$064(a5)  ; BLTAMOD (source modulo)
+        move.w  #0044,$066(a5)  ; BLTDMOD (dest modulo)
 
         moveq   #0,d0
         move.w  #32,d0          ; height
         lsl.w   #6,d0           ; height to approriate bits
         or.w    #2,d0           ; width / 16
-        move.w  d0,$dff058      ; BLTSIZE       
+        move.w  d0,$058(a5)     ; BLTSIZE       
         rts
 
 Scroll:           
         WaitForBlitter
-        move.w  #0002,$dff064  ; BLTAMOD (source modulo)
-        move.w  #0002,$dff066  ; BLTDMOD (dest modulo)
+        move.w  #0002,$064(a5)  ; BLTAMOD (source modulo)
+        move.w  #0002,$066(a5)  ; BLTDMOD (dest modulo)
 
         
-        move.w  #0000,$dff0042 ; BLTCON1
+        move.w  #$0000,$042(a5) ; BLTCON1
         clr.l   d0
         clr.l   d2
         move.w  #$09f0,d0
         move.w  #15,d2
         mulu    #$1000,d2
         or.w    d2,d0
-        move.w  d0,$dff040     ; BLTCON0
+        move.w  d0,$040(a5)    ; BLTCON0
         move.l  bitplane1,a1
         add.l   #2,a1
-        move.l  a1,$dff050     ; BLTAPTH source
+        move.l  a1,$050(a5)    ; BLTAPTH source
         move.l  bitplane1,a0
         add.l   #0,a0
-        move.l  a0,$dff054     ; BLTDPTH dest
+        move.l  a0,$054(a5)    ; BLTDPTH dest
         moveq   #0,d0
         move.w  #32,d0         ; height
         lsl.w   #6,d0          ; height to appropriate bits
         or.w    #23,d0         ; width / 16
-        move.w  d0,$dff058     ; BLTSIZE
+        move.w  d0,$058(a5)    ; BLTSIZE
         rts
       
          
@@ -468,6 +473,6 @@ low12:  dc.w    $0000
         dc.w    $ffff,$fffe
         
         ; change this to where you have the font
-Font    incbin  "Work:MyProjects/Scroller/gfx/gradbubble-32x32-wip.raw"
+Font    incbin  "gfx/gradbubble-32x32-wip.raw"
 spaceg  ds.b    (32/8)*32
         end
